@@ -1,5 +1,5 @@
+import Card from "@/components/Card";
 import React from "react";
-import Card from "./Card";
 
 const HomePage: React.FC = () => {
   return (
@@ -18,10 +18,10 @@ const HomePage: React.FC = () => {
           </h2>
           <div className="flex md:flex-col gap-3 w-full md:w-auto">
             <button className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium shadow hover:bg-blue-600 w-full md:w-52">
-              I Lost Something
+              <a href="/lost">I lost Something</a>
             </button>
             <button className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium shadow hover:bg-blue-600 w-full md:w-52">
-              I Found Something
+              <a href="/found"> I Found Something</a>
             </button>
           </div>
         </div>
@@ -36,10 +36,12 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="mt-10 w-full max-w-5xl">
-        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Recent Items</h3>
+        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Recent Items
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <Card/>
-          <Card/>
+          <Card />
+          <Card />
         </div>
       </div>
     </div>
