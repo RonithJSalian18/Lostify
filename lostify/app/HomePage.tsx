@@ -5,10 +5,18 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50 p-4">
       <div className="w-full flex justify-between items-center max-w-5xl">
-        <h1 className="text-xl md:text-2xl font-bold">Lostify</h1>
-        <button className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-200 text-sm md:text-base font-semibold">
-          Login
-        </button>
+        <div className="flex space-x-2 items-center">
+          <div className="w-6 h-6 rounded-full bg-blue-600">🔍</div>
+          <h1 className="text-xl md:text-2xl font-bold">Lostify</h1>
+        </div>
+        <div className="space-x-6 text-gray-700">
+          <a href="/about" className="text-gray-700 hover:text-blue-600">
+            About
+          </a>
+          <button className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-200 text-sm md:text-base font-semibold">
+            Login
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row items-center justify-between max-w-5xl w-full mt-10 gap-6">

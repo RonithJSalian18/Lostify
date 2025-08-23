@@ -21,11 +21,8 @@ const Lost: React.FC = () => {
           <a href="/" className="hover:text-blue-600">
             Home
           </a>
-          <a href="#" className="text-gray-700 hover:text-blue-600">
+          <a href="/about" className="text-gray-700 hover:text-blue-600">
             About
-          </a>
-          <a href="#" className="text-gray-700 hover:text-blue-600">
-            Contact
           </a>
         </div>
       </nav>

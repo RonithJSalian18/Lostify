@@ -26,11 +26,8 @@ const FoundItemForm: React.FC = () => {
           <a href="/" className="hover:text-blue-600">
             Home
           </a>
-          <a href="#" className="hover:text-blue-600">
+          <a href="/about" className="hover:text-blue-600">
             About
-          </a>
-          <a href="#" className="hover:text-blue-600">
-            Contact
           </a>
         </div>
       </nav>
