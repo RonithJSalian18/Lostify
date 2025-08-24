@@ -45,7 +45,9 @@ const HomePage: React.FC = () => {
 
       <div className="mt-10 w-full max-w-5xl">
         <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          Recent Items
+          <a href="/browse" className="hover:text-blue-600">
+            Recent Items
+          </a>
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <Card />
