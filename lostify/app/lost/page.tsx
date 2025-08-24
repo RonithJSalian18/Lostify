@@ -11,17 +11,20 @@ const Lost: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div
+      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black 
+      relative overflow-hidden"
+    >
       <nav className="flex justify-between items-center px-8 py-4">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 rounded-full bg-blue-600">🔍</div>
-          <span className="font-bold text-lg">Lostify</span>
+          <span className="font-bold text-lg text-white">Lostify</span>
         </div>
         <div className="space-x-6">
-          <a href="/" className="hover:text-blue-600">
+          <a href="/" className="hover:text-blue-600 text-white">
             Home
           </a>
-          <a href="/about" className="text-gray-700 hover:text-blue-600">
+          <a href="/about" className="text-white hover:text-blue-600">
             About
           </a>
         </div>

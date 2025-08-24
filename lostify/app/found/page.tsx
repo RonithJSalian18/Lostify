@@ -14,19 +14,22 @@ const FoundItemForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 px-4">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black 
+      relative overflow-hidden px-4"
+    >
       <nav className="w-full flex justify-between items-center py-4 px-6">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
             🔍
           </div>
-          <span className="font-bold text-lg">Lostify</span>
+          <span className="font-bold text-lg text-white">Lostify</span>
         </div>
         <div className="space-x-6 text-gray-700">
-          <a href="/" className="hover:text-blue-600">
+          <a href="/" className="hover:text-blue-600 text-white">
             Home
           </a>
-          <a href="/about" className="hover:text-blue-600">
+          <a href="/about" className="hover:text-blue-600 text-white">
             About
           </a>
         </div>
