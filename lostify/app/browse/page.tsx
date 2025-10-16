@@ -1,38 +1,62 @@
+"use client";
+
 import LostItemCard from "@/components/LostItemCard";
-import React from "react";
+import React, { useState } from "react";
+
+interface Item {
+  name: string;
+  location: string;
+  imageUrl: string;
+  description?: string;
+  contact?: string;
+  email?: string;
+}
 
 const LostPage: React.FC = () => {
   // Example lost items (replace with backend data later)
-  const lostItems = [
+  const lostItems: Item[] = [
     {
       name: "Black Wallet",
       location: "Central Park, New York",
       imageUrl: "/images/wallet.jpg",
+      description: "Leather wallet with multiple cards inside.",
+      contact: "9876543210",
+      email: "walletfinder@mail.com",
     },
     {
       name: "Silver Watch",
       location: "Downtown, San Francisco",
       imageUrl: "/images/watch.jpg",
+      description: "Rolex silver watch, slightly scratched.",
+      contact: "9876541230",
+      email: "watchowner@mail.com",
     },
     {
       name: "Gray Backpack",
       location: "Western District, Hong Kong",
       imageUrl: "/images/backpack.jpg",
+      description: "Nike backpack with books and water bottle.",
+      contact: "9911223344",
+      email: "bagsearch@mail.com",
     },
     {
       name: "Black iPhone",
       location: "Williamsburg, Brooklyn",
       imageUrl: "/images/iphone.jpg",
+      description: "iPhone 12 with black case, screen protector cracked.",
+      contact: "9998887777",
+      email: "lostiphone@mail.com",
     },
   ];
+
+  // Modal state
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gray-900 text-white">
       {/* --- Creative Background --- */}
       <div className="absolute inset-0 -z-10">
-        {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-        {/* Blurry Animated Circles */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
         <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
@@ -93,16 +117,68 @@ const LostPage: React.FC = () => {
           {/* Items Grid */}
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {lostItems.map((item, index) => (
-              <LostItemCard
+              <div
                 key={index}
-                name={item.name}
-                location={item.location}
-                imageUrl={item.imageUrl}
-              />
+                onClick={() => setSelectedItem(item)}
+                className="cursor-pointer"
+              >
+                <LostItemCard
+                  name={item.name}
+                  location={item.location}
+                  imageUrl={item.imageUrl}
+                />
+              </div>
             ))}
           </section>
         </div>
       </main>
+
+      {/* Modal Popup */}
+      {selectedItem && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-lg w-full shadow-lg relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedItem(null)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+            >
+              ✖
+            </button>
+
+            {/* Item Image */}
+            <img
+              src={selectedItem.imageUrl}
+              alt={selectedItem.name}
+              className="w-full h-64 object-cover rounded-md mb-4"
+            />
+
+            {/* Item Details */}
+            <h3 className="text-2xl font-bold mb-2">{selectedItem.name}</h3>
+            <p className="text-gray-300 mb-2">
+              <span className="font-semibold">Location:</span>{" "}
+              {selectedItem.location}
+            </p>
+            {selectedItem.description && (
+              <p className="text-gray-400 mb-2">
+                <span className="font-semibold">Description:</span>{" "}
+                {selectedItem.description}
+              </p>
+            )}
+            {selectedItem.contact && (
+              <p className="text-gray-400 mb-2">
+                <span className="font-semibold">Contact:</span>{" "}
+                {selectedItem.contact}
+              </p>
+            )}
+            {selectedItem.email && (
+              <p className="text-gray-400 mb-2">
+                <span className="font-semibold">Email:</span>{" "}
+                {selectedItem.email}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
