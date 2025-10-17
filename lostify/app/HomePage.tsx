@@ -25,16 +25,16 @@ const HomePage: React.FC = () => {
           <a href="/about" className="hover:text-blue-400 transition">
             About
           </a>
-          <button className="px-4 py-2 border rounded-lg hover:bg-gray-800 text-sm md:text-base font-semibold transition hover:text-blue-400">
+          {/* <button className="px-4 py-2 border rounded-lg hover:bg-gray-800 text-sm md:text-base font-semibold transition hover:text-blue-400">
             Login
-          </button>
+          </button> */}
         </div>
       </div>
 
       {/* Hero Section */}
-      <div className="flex flex-col md:flex-row items-center justify-between max-w-5xl w-full mt-10 gap-6 relative z-10">
+      <div className="flex flex-col md:flex-row items-center justify-between max-w-5xl w-full mt-30 gap-6 relative z-10">
         <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left w-lg">
-          <h2 className="text-2xl md:text-4xl font-bold">
+          <h2 className="text-2xl md:text-4xl font-bold mb-10">
             What are you searching for?
           </h2>
           <div className="flex md:flex-col gap-3 w-full md:w-auto">
@@ -49,13 +49,13 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="mt-10 w-full max-w-5xl relative z-10">
+      {/* <div className="mt-10 w-full max-w-5xl relative z-10">
         <input
           type="text"
           placeholder="Search for an item..."
           className="w-full border rounded-lg px-4 py-3 text-white shadow-md focus:ring-2 focus:ring-white focus:outline-none transition"
         />
-      </div>
+      </div> */}
 
       {/* Recent Items */}
       <div className="mt-10 w-full max-w-5xl relative z-10">
