@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
 
 const Lost: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -72,12 +74,12 @@ const Lost: React.FC = () => {
           <span className="font-bold text-lg text-white">Lostify</span>
         </div>
         <div className="space-x-6">
-          <a href="/" className="hover:text-blue-600 text-white">
+          <Link href="/" className="hover:text-blue-600 text-white">
             Home
-          </a>
-          <a href="/about" className="text-white hover:text-blue-600">
+          </Link>
+          <Link href="/about" className="text-white hover:text-blue-600">
             About
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -190,11 +192,12 @@ const Lost: React.FC = () => {
             </div>
 
             {image && (
-              <div className="mt-3">
-                <img
+              <div className="mt-3 relative w-full h-64">
+                <Image
                   src={URL.createObjectURL(image)}
                   alt="Preview"
-                  className="w-full max-h-64 object-cover rounded-md border"
+                  fill
+                  className="object-cover rounded-md border"
                 />
               </div>
             )}

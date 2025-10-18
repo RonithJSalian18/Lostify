@@ -1,5 +1,23 @@
 import { NextResponse } from "next/server";
-import pool from "@/lib/db";
+import { prisma } from "@/lib/prisma";
+
+export async function GET() {
+  try {
+    const foundItems = await prisma.foundItem.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(foundItems);
+  } catch (err) {
+    console.error("Error fetching found items:", err);
+    return NextResponse.json(
+      { error: "Failed to fetch found items" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -17,14 +35,20 @@ export async function POST(req: Request) {
       imageData = Buffer.from(bytes).toString("base64");
     }
 
-    await pool.query(
-      "INSERT INTO found_items (item_name, description, location, contact, email, image) VALUES ($1, $2, $3, $4, $5, $6)",
-      [itemName, description, location, contact, email, imageData]
-    );
+    await prisma.foundItem.create({
+      data: {
+        itemName,
+        description,
+        location,
+        contact,
+        email,
+        image: imageData,
+      },
+    });
 
-    return NextResponse.json({ message: "Found item saved successfully ✅" });
+    return NextResponse.json({ message: "Found item saved successfully" });
   } catch (err) {
-    console.error("Error inserting data:", err);
+    console.error("Error inserting found item:", err);
     return NextResponse.json(
       { error: "Failed to save found item" },
       { status: 500 }
