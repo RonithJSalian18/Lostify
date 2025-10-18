@@ -1,5 +1,6 @@
 // src/pages/About.tsx
 import React from "react";
+import Link from "next/link";
 
 const About: React.FC = () => {
   return (
@@ -22,12 +23,12 @@ const About: React.FC = () => {
             <span className="font-bold text-lg text-gray-800">Lostify</span>
           </div>
           <div className="space-x-6">
-            <a href="/" className="text-gray-700 hover:text-blue-600">
+            <Link href="/" className="text-gray-700 hover:text-blue-600">
               Home
-            </a>
-            <a href="/about" className="text-blue-600 font-semibold">
+            </Link>
+            <Link href="/about" className="text-blue-600 font-semibold">
               About
-            </a>
+            </Link>
           </div>
         </nav>
 
