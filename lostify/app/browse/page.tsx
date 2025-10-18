@@ -1,56 +1,123 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import LostItemCard from "@/components/LostItemCard";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+interface DBItem {
+  id: number;
+  itemName: string;
+  description: string;
+  location: string;
+  contact: string;
+  email: string;
+  image: string | null;
+  createdAt: string;
+}
 
 interface Item {
+  id: number;
   name: string;
   location: string;
   imageUrl: string;
   description?: string;
   contact?: string;
   email?: string;
+  type: "lost" | "found";
 }
 
 const LostPage: React.FC = () => {
-  // Example lost items (replace with backend data later)
-  const lostItems: Item[] = [
-    {
-      name: "Black Wallet",
-      location: "Central Park, New York",
-      imageUrl: "/images/wallet.jpg",
-      description: "Leather wallet with multiple cards inside.",
-      contact: "9876543210",
-      email: "walletfinder@mail.com",
-    },
-    {
-      name: "Silver Watch",
-      location: "Downtown, San Francisco",
-      imageUrl: "/images/watch.jpg",
-      description: "Rolex silver watch, slightly scratched.",
-      contact: "9876541230",
-      email: "watchowner@mail.com",
-    },
-    {
-      name: "Gray Backpack",
-      location: "Western District, Hong Kong",
-      imageUrl: "/images/backpack.jpg",
-      description: "Nike backpack with books and water bottle.",
-      contact: "9911223344",
-      email: "bagsearch@mail.com",
-    },
-    {
-      name: "Black iPhone",
-      location: "Williamsburg, Brooklyn",
-      imageUrl: "/images/iphone.jpg",
-      description: "iPhone 12 with black case, screen protector cracked.",
-      contact: "9998887777",
-      email: "lostiphone@mail.com",
-    },
-  ];
-
-  // Modal state
+  const [allItems, setAllItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [showLost, setShowLost] = useState(true);
+  const [showFound, setShowFound] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch items from both APIs
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        setLoading(true);
+        const [lostResponse, foundResponse] = await Promise.all([
+          fetch("/api/lost"),
+          fetch("/api/found"),
+        ]);
+
+        const lostData: DBItem[] = await lostResponse.json();
+        const foundData: DBItem[] = await foundResponse.json();
+
+        // Transform lost items
+        const lostItems: Item[] = lostData.map((item) => ({
+          id: item.id,
+          name: item.itemName,
+          location: item.location,
+          imageUrl: item.image
+            ? `data:image/jpeg;base64,${item.image}`
+            : "/images/placeholder.jpg",
+          description: item.description,
+          contact: item.contact,
+          email: item.email,
+          type: "lost",
+        }));
+
+        // Transform found items
+        const foundItems: Item[] = foundData.map((item) => ({
+          id: item.id,
+          name: item.itemName,
+          location: item.location,
+          imageUrl: item.image
+            ? `data:image/jpeg;base64,${item.image}`
+            : "/images/placeholder.jpg",
+          description: item.description,
+          contact: item.contact,
+          email: item.email,
+          type: "found",
+        }));
+
+        const combined = [...lostItems, ...foundItems];
+        setAllItems(combined);
+        setFilteredItems(combined);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  // Filter items based on search, location, and type
+  useEffect(() => {
+    let filtered = allItems;
+
+    // Filter by type
+    filtered = filtered.filter((item) => {
+      if (showLost && item.type === "lost") return true;
+      if (showFound && item.type === "found") return true;
+      return false;
+    });
+
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter by location
+    if (locationFilter) {
+      filtered = filtered.filter((item) =>
+        item.location.toLowerCase().includes(locationFilter.toLowerCase())
+      );
+    }
+
+    setFilteredItems(filtered);
+  }, [searchQuery, locationFilter, showLost, showFound, allItems]);
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gray-900 text-white">
@@ -70,9 +137,9 @@ const LostPage: React.FC = () => {
           </div>
           <h1 className="text-2xl font-bold tracking-wide">Lostify</h1>
         </div>
-        <a href="/" className="text-gray-200 hover:text-blue-400 transition">
+        <Link href="/" className="text-gray-200 hover:text-blue-400 transition">
           Home
-        </a>
+        </Link>
       </header>
 
       {/* Search & Filters */}
@@ -84,6 +151,8 @@ const LostPage: React.FC = () => {
         <input
           type="text"
           placeholder="Search for an item..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full p-3 border border-gray-700 bg-gray-800 rounded-lg mb-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
@@ -96,11 +165,21 @@ const LostPage: React.FC = () => {
             <div className="mb-6">
               <h3 className="font-medium mb-3 text-gray-300">Type</h3>
               <label className="flex items-center gap-2 mb-2">
-                <input type="checkbox" className="accent-blue-500" />
+                <input
+                  type="checkbox"
+                  className="accent-blue-500"
+                  checked={showLost}
+                  onChange={(e) => setShowLost(e.target.checked)}
+                />
                 Lost
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-green-500" />
+                <input
+                  type="checkbox"
+                  className="accent-green-500"
+                  checked={showFound}
+                  onChange={(e) => setShowFound(e.target.checked)}
+                />
                 Found
               </label>
             </div>
@@ -109,26 +188,40 @@ const LostPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Enter location"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
                 className="w-full p-2 border border-gray-700 bg-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </aside>
 
           {/* Items Grid */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {lostItems.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedItem(item)}
-                className="cursor-pointer"
-              >
-                <LostItemCard
-                  name={item.name}
-                  location={item.location}
-                  imageUrl={item.imageUrl}
-                />
+          <section className="flex-1">
+            {loading ? (
+              <div className="text-center text-gray-400 py-20">
+                Loading items...
               </div>
-            ))}
+            ) : filteredItems.length === 0 ? (
+              <div className="text-center text-gray-400 py-20">
+                No items found matching your filters.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {filteredItems.map((item) => (
+                  <div
+                    key={`${item.type}-${item.id}`}
+                    onClick={() => setSelectedItem(item)}
+                    className="cursor-pointer"
+                  >
+                    <LostItemCard
+                      name={item.name}
+                      location={item.location}
+                      imageUrl={item.imageUrl}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </main>
@@ -144,12 +237,14 @@ const LostPage: React.FC = () => {
             >
               ✖
             </button>
-
             {/* Item Image */}
-            <img
+            <Image
               src={selectedItem.imageUrl}
               alt={selectedItem.name}
+              width={800}
+              height={426}
               className="w-full h-64 object-cover rounded-md mb-4"
+              priority
             />
 
             {/* Item Details */}

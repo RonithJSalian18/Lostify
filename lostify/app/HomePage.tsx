@@ -1,7 +1,44 @@
-import Card from "@/components/Card";
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import LostItemCard from "@/components/LostItemCard";
+
+type Item = {
+  id: number;
+  itemName: string;
+  description: string;
+  location: string;
+  contact: string;
+  email: string;
+  image: string | null;
+  createdAt: string;
+  updatedAt: string;
+  type: "lost" | "found";
+};
 
 const HomePage: React.FC = () => {
+  const [recentItems, setRecentItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecentItems = async () => {
+      try {
+        const response = await fetch("/api/recent");
+        if (response.ok) {
+          const data = await response.json();
+          // Show only the 6 most recent items
+          setRecentItems(data.slice(0, 6));
+        }
+      } catch (error) {
+        console.error("Error fetching recent items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentItems();
+  }, []);
+
   return (
     <div
       className="min-h-screen flex flex-col items-center p-4 
@@ -59,16 +96,44 @@ const HomePage: React.FC = () => {
 
       {/* Recent Items */}
       <div className="mt-10 w-full max-w-5xl relative z-10">
-        <h3 className="text-xl md:text-2xl font-bold mb-6">
-          <a href="/browse" className="hover:text-blue-400 transition">
-            Recent Items
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl md:text-2xl font-bold">Recent Items</h3>
+          <a
+            href="/recent"
+            className="text-blue-400 hover:text-blue-300 transition font-medium"
+          >
+            View All →
           </a>
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <Card />
-          <Card />
-          <Card />
         </div>
+
+        {loading ? (
+          <p className="text-center text-gray-400">Loading recent items...</p>
+        ) : recentItems.length === 0 ? (
+          <p className="text-center text-gray-400">No items found yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {recentItems.map((item) => (
+              <div key={`${item.type}-${item.id}`} className="relative">
+                <div
+                  className={`absolute -top-2 -right-2 z-10 px-3 py-1 rounded-full text-xs font-semibold text-white ${
+                    item.type === "lost" ? "bg-red-500" : "bg-green-500"
+                  }`}
+                >
+                  {item.type === "lost" ? "Lost" : "Found"}
+                </div>
+                <LostItemCard
+                  name={item.itemName}
+                  location={item.location}
+                  imageUrl={
+                    item.image
+                      ? `data:image/jpeg;base64,${item.image}`
+                      : "/placeholder-image.png"
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

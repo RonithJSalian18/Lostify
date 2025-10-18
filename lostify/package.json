@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "npx prisma db seed"
   },
   "dependencies": {
+    "@prisma/client": "^6.17.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",
@@ -24,7 +26,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
+    "prisma": "^6.17.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 const FoundItemForm: React.FC = () => {
   const [itemName, setItemName] = useState("");
@@ -90,14 +92,14 @@ const FoundItemForm: React.FC = () => {
             🔍
           </div>
           <span className="font-bold text-lg text-white">Lostify</span>
-        </div>
-        <div className="space-x-6 text-gray-700">
-          <a href="/" className="hover:text-blue-600 text-white">
-            Home
-          </a>
-          <a href="/about" className="hover:text-blue-600 text-white">
-            About
-          </a>
+          <div className="space-x-6 text-gray-700">
+            <Link href="/" className="hover:text-blue-600 text-white">
+              Home
+            </Link>
+            <Link href="/about" className="hover:text-blue-600 text-white">
+              About
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -168,13 +170,14 @@ const FoundItemForm: React.FC = () => {
         />
 
         {image && (
-          <div className="mt-3">
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Preview"
-              className="w-full max-h-64 object-cover rounded-md border"
-            />
-          </div>
+          <Image
+            src={URL.createObjectURL(image)}
+            alt="Preview"
+            width={800}
+            height={512}
+            className="w-full max-h-64 object-cover rounded-md border"
+            unoptimized
+          />
         )}
 
         <button
