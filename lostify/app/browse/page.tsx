@@ -28,8 +28,7 @@ const LostItemCard: React.FC<LostItemCardProps> = ({
         transition-all duration-300 transform hover:scale-[1.03]
       "
     >
-      {/* Image */}
-      <div className="relative w-full h-60">
+      <div className="relative w-full h-48 sm:h-60">
         <Image
           src={imageUrl}
           alt={name}
@@ -38,14 +37,14 @@ const LostItemCard: React.FC<LostItemCardProps> = ({
           sizes="100%"
         />
       </div>
-
-      {/* Content */}
-      <div className="p-4 text-white">
-        <h3 className="text-lg font-semibold mb-1 line-clamp-1">{name}</h3>
-        <p className="text-sm text-gray-400 line-clamp-1">📍 {location}</p>
+      <div className="p-3 text-white">
+        <h3 className="text-base sm:text-lg font-semibold mb-1 line-clamp-1">
+          {name}
+        </h3>
+        <p className="text-xs sm:text-sm text-gray-400 line-clamp-1">
+          📍 {location}
+        </p>
       </div>
-
-      {/* Subtle Glow Overlay */}
       <div className="absolute inset-0 rounded-2xl pointer-events-none bg-gradient-to-t from-blue-500/10 to-transparent"></div>
     </div>
   );
@@ -83,6 +82,7 @@ const LostPage: React.FC = () => {
   const [showLost, setShowLost] = useState(true);
   const [showFound, setShowFound] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -160,14 +160,14 @@ const LostPage: React.FC = () => {
   }, [searchQuery, locationFilter, showLost, showFound, allItems]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 sm:px-6">
       {/* Background Blobs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-green-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
-      <div className="absolute top-1/3 right-1/3 w-60 h-60 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute top-20 left-4 sm:left-10 w-60 sm:w-72 h-60 sm:h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute bottom-20 right-4 sm:right-10 w-72 sm:w-96 h-72 sm:h-96 bg-green-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute top-1/3 right-1/3 w-40 sm:w-60 h-40 sm:h-60 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
 
       {/* Navbar */}
-      <header className="flex items-center justify-between px-6 py-4 md:mx-20 relative z-10">
+      <header className="flex items-center justify-between py-4">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white">
             🔍
@@ -179,29 +179,39 @@ const LostPage: React.FC = () => {
         </Link>
       </header>
 
-      {/* Search & Filters */}
-      <main className="p-6 max-w-6xl mx-auto mt-10 relative z-10">
-        <h2 className="text-3xl font-bold mb-4 text-center">
-          What are you looking for?
-        </h2>
-
+      {/* Search */}
+      <main className="mt-6 relative z-10">
         <input
           type="text"
           placeholder="Search for an item..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-3 border border-gray-700 bg-gray-800 rounded-lg mb-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-gray-700 bg-gray-800 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
-        <div className="flex gap-8">
+        {/* Mobile Filter Toggle */}
+        <div className="sm:hidden flex justify-end mb-2">
+          <button
+            onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+            className="bg-blue-600 px-3 py-1 rounded-md text-white"
+          >
+            {showFiltersMobile ? "Hide Filters" : "Show Filters"}
+          </button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
           {/* Filters */}
-          <aside className="w-56 bg-gray-800 p-4 rounded-xl shadow-lg">
-            <button className="py-2 mb-4 font-semibold text-xl text-blue-400">
+          <aside
+            className={`${
+              showFiltersMobile ? "block" : "hidden"
+            } sm:block w-full sm:w-56 bg-gray-800 p-4 rounded-xl shadow-lg`}
+          >
+            <button className="py-2 mb-4 font-semibold text-xl text-blue-400 w-full">
               Filters
             </button>
-            <div className="mb-6">
-              <h3 className="font-medium mb-3 text-gray-300">Type</h3>
-              <label className="flex items-center gap-2 mb-2">
+            <div className="mb-4">
+              <h3 className="font-medium mb-2 text-gray-300">Type</h3>
+              <label className="flex items-center gap-2 mb-1">
                 <input
                   type="checkbox"
                   className="accent-blue-500"
@@ -221,7 +231,7 @@ const LostPage: React.FC = () => {
               </label>
             </div>
             <div>
-              <h3 className="font-medium mb-3 text-gray-300">Location</h3>
+              <h3 className="font-medium mb-2 text-gray-300">Location</h3>
               <input
                 type="text"
                 placeholder="Enter location"
@@ -243,7 +253,7 @@ const LostPage: React.FC = () => {
                 No items found matching your filters.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 {filteredItems.map((item) => (
                   <div
                     key={`${item.type}-${item.id}`}
@@ -265,8 +275,8 @@ const LostPage: React.FC = () => {
 
       {/* Modal Popup */}
       {selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-lg w-full shadow-lg relative">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 px-4">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg relative overflow-y-auto max-h-[90vh]">
             <button
               onClick={() => setSelectedItem(null)}
               className="absolute top-3 right-3 text-gray-400 hover:text-white"
@@ -278,10 +288,12 @@ const LostPage: React.FC = () => {
               alt={selectedItem.name}
               width={500}
               height={400}
-              className="w-full h-72 object-cover rounded-md mb-4"
+              className="w-full h-56 sm:h-72 object-cover rounded-md mb-4"
               priority
             />
-            <h3 className="text-2xl font-bold mb-2">{selectedItem.name}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">
+              {selectedItem.name}
+            </h3>
             <p className="text-gray-300 mb-2">
               <span className="font-semibold">Location:</span>{" "}
               {selectedItem.location}
