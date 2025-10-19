@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import LostItemCard from "@/components/LostItemCard";
+import Image from "next/image";
 
 type Item = {
   id: number;
@@ -16,6 +16,41 @@ type Item = {
   type: "lost" | "found";
 };
 
+// 🟢 LostItemCard component (modern & theme-blended)
+const LostItemCard: React.FC<{
+  name: string;
+  location: string;
+  imageUrl: string;
+}> = ({ name, location, imageUrl }) => {
+  return (
+    <div
+      className="group bg-gray-900/60 backdrop-blur-md border border-gray-800 
+      rounded-xl overflow-hidden shadow-lg hover:shadow-blue-700/40 
+      transition-all duration-300 hover:scale-[1.03]"
+    >
+      {/* Image */}
+      <div className="relative w-full h-44">
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="200px"
+        />
+      </div>
+
+      {/* Details */}
+      <div className="p-4 flex flex-col justify-between">
+        <h3 className="text-lg font-semibold text-white mb-1">{name}</h3>
+        <p className="text-sm text-gray-400 flex items-center gap-1">
+          📍 <span>{location}</span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// 🟣 HomePage Component
 const HomePage: React.FC = () => {
   const [recentItems, setRecentItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +61,6 @@ const HomePage: React.FC = () => {
         const response = await fetch("/api/recent");
         if (response.ok) {
           const data = await response.json();
-          // Show only the 6 most recent items
           setRecentItems(data.slice(0, 6));
         }
       } catch (error) {
@@ -62,9 +96,6 @@ const HomePage: React.FC = () => {
           <a href="/about" className="hover:text-blue-400 transition">
             About
           </a>
-          {/* <button className="px-4 py-2 border rounded-lg hover:bg-gray-800 text-sm md:text-base font-semibold transition hover:text-blue-400">
-            Login
-          </button> */}
         </div>
       </div>
 
@@ -85,21 +116,12 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
-      {/* <div className="mt-10 w-full max-w-5xl relative z-10">
-        <input
-          type="text"
-          placeholder="Search for an item..."
-          className="w-full border rounded-lg px-4 py-3 text-white shadow-md focus:ring-2 focus:ring-white focus:outline-none transition"
-        />
-      </div> */}
-
       {/* Recent Items */}
       <div className="mt-10 w-full max-w-5xl relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl md:text-2xl font-bold">Recent Items</h3>
           <a
-            href="/recent"
+            href="/browse"
             className="text-blue-400 hover:text-blue-300 transition font-medium"
           >
             View All →
@@ -114,13 +136,19 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {recentItems.map((item) => (
               <div key={`${item.type}-${item.id}`} className="relative">
+                {/* Lost/Found Tag */}
                 <div
-                  className={`absolute -top-2 -right-2 z-10 px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                    item.type === "lost" ? "bg-red-500" : "bg-green-500"
-                  }`}
+                  className={`absolute top-2 right-2 z-10 px-2.5 py-1 rounded-full text-[0.7rem] 
+                    font-semibold text-white shadow-lg backdrop-blur-sm transition-all
+                    ${
+                      item.type === "lost"
+                        ? "bg-red-600/80 border border-red-400/40 hover:shadow-red-500/40"
+                        : "bg-green-600/80 border border-green-400/40 hover:shadow-green-500/40"
+                    }`}
                 >
                   {item.type === "lost" ? "Lost" : "Found"}
                 </div>
+
                 <LostItemCard
                   name={item.itemName}
                   location={item.location}

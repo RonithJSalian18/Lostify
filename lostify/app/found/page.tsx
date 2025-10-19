@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +11,6 @@ const FoundItemForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
-  // ✅ Notification state
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
@@ -23,7 +21,6 @@ const FoundItemForm: React.FC = () => {
     visible: false,
   });
 
-  // ✅ Automatically hide notification after 3 seconds
   useEffect(() => {
     if (notification.visible) {
       const timer = setTimeout(() => {
@@ -56,7 +53,6 @@ const FoundItemForm: React.FC = () => {
         visible: true,
       });
 
-      // Clear the form
       setItemName("");
       setDescription("");
       setLocation("");
@@ -73,100 +69,111 @@ const FoundItemForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden px-4">
-      {/* ✅ Notification Popup */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden px-4 py-8">
+      {/* Notification */}
       {notification.visible && (
         <div
-          className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 px-6 py-4 rounded-xl shadow-xl transition-all duration-300
-          ${notification.type === "success" ? "bg-green-600" : "bg-red-600"} 
-          text-white text-lg font-semibold`}
+          className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 px-6 py-4 rounded-xl shadow-xl
+            ${notification.type === "success" ? "bg-green-600" : "bg-red-600"} 
+            text-white text-lg font-semibold text-center transition-all duration-300`}
         >
           {notification.message}
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="w-full flex justify-between items-center py-4 px-6">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
+      {/* Navbar */}
+      <header className="flex justify-between items-center max-w-6xl mx-auto mb-8">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
             🔍
           </div>
-          <span className="font-bold text-lg text-white">Lostify</span>
-          <div className="space-x-6 text-gray-700">
-            <Link href="/" className="hover:text-blue-600 text-white">
-              Home
-            </Link>
-            <Link href="/about" className="hover:text-blue-600 text-white">
-              About
-            </Link>
-          </div>
+          <span className="text-2xl font-bold text-white tracking-wide">
+            Lostify
+          </span>
         </div>
-      </nav>
+        <nav className="space-x-6">
+          <Link href="/" className="text-white hover:text-blue-400 transition">
+            Home
+          </Link>
+          <Link
+            href="/about"
+            className="text-white hover:text-blue-400 transition"
+          >
+            About
+          </Link>
+        </nav>
+      </header>
 
       {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white max-w-md w-full shadow-lg rounded-2xl p-8 mt-6"
+        className="bg-gray-800 max-w-md w-full mx-auto shadow-lg rounded-2xl p-8"
       >
-        <h1 className="text-2xl font-semibold text-center mb-2">
-          Found Something
+        <h1 className="text-2xl font-semibold text-center mb-2 text-white">
+          Found Something?
         </h1>
-        <p className="text-gray-600 text-center mb-6">
+        <p className="text-gray-300 text-center mb-6">
           Help others find their lost items by posting a description and image
           of the item you found.
         </p>
 
-        <label className="block mb-2 font-medium">Item name</label>
+        <label className="block mb-2 font-medium text-white">Item name</label>
         <input
           type="text"
           placeholder="e.g. Black Wallet"
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
         />
 
-        <label className="block mb-2 font-medium">Description</label>
+        <label className="block mb-2 font-medium text-white">Description</label>
         <textarea
           placeholder="e.g. Leather wallet with ID card inside"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
           rows={3}
         />
 
-        <label className="block mb-2 font-medium">Location</label>
+        <label className="block mb-2 font-medium text-white">Location</label>
         <input
           type="text"
           placeholder="e.g. New York, NY"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
         />
 
-        <label className="block mb-2 font-medium">Contact Number</label>
+        <label className="block mb-2 font-medium text-white">
+          Contact Number
+        </label>
         <input
           type="tel"
           placeholder="e.g. +1 234 567 8901"
           value={contact}
           onChange={(e) => setContact(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
         />
 
-        <label className="block mb-2 font-medium">Email Address</label>
+        <label className="block mb-2 font-medium text-white">
+          Email Address
+        </label>
         <input
           type="email"
           placeholder="e.g. example@mail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
         />
 
-        <label className="block mb-2 font-medium">Upload Image</label>
+        <label className="block mb-2 font-medium text-white">
+          Upload Image
+        </label>
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
-          className="w-full border rounded-md px-3 py-2 mb-6"
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-6 bg-gray-900 text-white"
         />
 
         {image && (
@@ -175,7 +182,7 @@ const FoundItemForm: React.FC = () => {
             alt="Preview"
             width={800}
             height={512}
-            className="w-full max-h-64 object-cover rounded-md border"
+            className="w-full max-h-64 object-cover rounded-md border mb-4"
             unoptimized
           />
         )}

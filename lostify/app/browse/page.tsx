@@ -2,9 +2,56 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import LostItemCard from "@/components/LostItemCard";
 import React, { useState, useEffect } from "react";
 
+// --- Themed LostItemCard ---
+interface LostItemCardProps {
+  name: string;
+  location: string;
+  imageUrl: string;
+}
+
+const LostItemCard: React.FC<LostItemCardProps> = ({
+  name,
+  location,
+  imageUrl,
+}) => {
+  return (
+    <div
+      className="
+        relative rounded-2xl overflow-hidden 
+        bg-gradient-to-br from-gray-800 via-gray-900 to-black
+        shadow-lg shadow-blue-900/40
+        border border-gray-700/50
+        hover:border-blue-500/60
+        hover:shadow-blue-700/50
+        transition-all duration-300 transform hover:scale-[1.03]
+      "
+    >
+      {/* Image */}
+      <div className="relative w-full h-60">
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          className="object-cover rounded-t-2xl"
+          sizes="100%"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-4 text-white">
+        <h3 className="text-lg font-semibold mb-1 line-clamp-1">{name}</h3>
+        <p className="text-sm text-gray-400 line-clamp-1">📍 {location}</p>
+      </div>
+
+      {/* Subtle Glow Overlay */}
+      <div className="absolute inset-0 rounded-2xl pointer-events-none bg-gradient-to-t from-blue-500/10 to-transparent"></div>
+    </div>
+  );
+};
+
+// --- LostPage Component ---
 interface DBItem {
   id: number;
   itemName: string;
@@ -37,7 +84,6 @@ const LostPage: React.FC = () => {
   const [showFound, setShowFound] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  // Fetch items from both APIs
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -50,7 +96,6 @@ const LostPage: React.FC = () => {
         const lostData: DBItem[] = await lostResponse.json();
         const foundData: DBItem[] = await foundResponse.json();
 
-        // Transform lost items
         const lostItems: Item[] = lostData.map((item) => ({
           id: item.id,
           name: item.itemName,
@@ -64,7 +109,6 @@ const LostPage: React.FC = () => {
           type: "lost",
         }));
 
-        // Transform found items
         const foundItems: Item[] = foundData.map((item) => ({
           id: item.id,
           name: item.itemName,
@@ -91,25 +135,21 @@ const LostPage: React.FC = () => {
     fetchItems();
   }, []);
 
-  // Filter items based on search, location, and type
   useEffect(() => {
     let filtered = allItems;
 
-    // Filter by type
     filtered = filtered.filter((item) => {
       if (showLost && item.type === "lost") return true;
       if (showFound && item.type === "found") return true;
       return false;
     });
 
-    // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    // Filter by location
     if (locationFilter) {
       filtered = filtered.filter((item) =>
         item.location.toLowerCase().includes(locationFilter.toLowerCase())
@@ -120,17 +160,14 @@ const LostPage: React.FC = () => {
   }, [searchQuery, locationFilter, showLost, showFound, allItems]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gray-900 text-white">
-      {/* --- Creative Background --- */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-      </div>
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+      {/* Background Blobs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-green-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute top-1/3 right-1/3 w-60 h-60 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-pulse"></div>
 
       {/* Navbar */}
-      <header className="flex items-center justify-between px-6 py-4 md:mx-20">
+      <header className="flex items-center justify-between px-6 py-4 md:mx-20 relative z-10">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white">
             🔍
@@ -143,7 +180,7 @@ const LostPage: React.FC = () => {
       </header>
 
       {/* Search & Filters */}
-      <main className="p-6 max-w-6xl mx-auto mt-10">
+      <main className="p-6 max-w-6xl mx-auto mt-10 relative z-10">
         <h2 className="text-3xl font-bold mb-4 text-center">
           What are you looking for?
         </h2>
@@ -230,24 +267,20 @@ const LostPage: React.FC = () => {
       {selectedItem && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg p-6 max-w-lg w-full shadow-lg relative">
-            {/* Close Button */}
             <button
               onClick={() => setSelectedItem(null)}
               className="absolute top-3 right-3 text-gray-400 hover:text-white"
             >
               ✖
             </button>
-            {/* Item Image */}
             <Image
               src={selectedItem.imageUrl}
               alt={selectedItem.name}
-              width={800}
-              height={426}
-              className="w-full h-64 object-cover rounded-md mb-4"
+              width={500}
+              height={400}
+              className="w-full h-72 object-cover rounded-md mb-4"
               priority
             />
-
-            {/* Item Details */}
             <h3 className="text-2xl font-bold mb-2">{selectedItem.name}</h3>
             <p className="text-gray-300 mb-2">
               <span className="font-semibold">Location:</span>{" "}

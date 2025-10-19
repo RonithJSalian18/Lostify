@@ -66,22 +66,27 @@ const Lost: React.FC = () => {
       relative overflow-hidden"
     >
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-8 py-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white">
+      <header className="flex justify-between items-center max-w-6xl mx-auto mb-8 mt-8">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
             🔍
           </div>
-          <span className="font-bold text-lg text-white">Lostify</span>
+          <span className="text-2xl font-bold text-white tracking-wide">
+            Lostify
+          </span>
         </div>
-        <div className="space-x-6">
-          <Link href="/" className="hover:text-blue-600 text-white">
+        <nav className="space-x-6">
+          <Link href="/" className="text-white hover:text-blue-400 transition">
             Home
           </Link>
-          <Link href="/about" className="text-white hover:text-blue-600">
+          <Link
+            href="/about"
+            className="text-white hover:text-blue-400 transition"
+          >
             About
           </Link>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {/* Popup Message */}
       <AnimatePresence>
@@ -101,116 +106,95 @@ const Lost: React.FC = () => {
       </AnimatePresence>
 
       {/* Form */}
-      <div className="flex justify-center items-center py-12">
-        <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-lg">
-          <h2 className="text-2xl font-semibold text-center mb-2">
-            Lost Something?
-          </h2>
-          <p className="text-center text-gray-600 mb-6">
-            Post details of your lost item so others can help you find it.
-          </p>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 max-w-md w-full mx-auto shadow-lg rounded-2xl p-8"
+      >
+        <h1 className="text-2xl font-semibold text-center mb-2 text-white">
+          Lost Something?
+        </h1>
+        <p className="text-gray-300 text-center mb-6">
+          Help others find their lost items by posting a description and image
+          of the item you found.
+        </p>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {/* Item name */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Item name
-              </label>
-              <input
-                type="text"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-                placeholder="e.g. Black Wallet"
-                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">Item name</label>
+        <input
+          type="text"
+          placeholder="e.g. Black Wallet"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
+        />
 
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Description
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="e.g. Leather wallet with ID card inside"
-                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">Description</label>
+        <textarea
+          placeholder="e.g. Leather wallet with ID card inside"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
+          rows={3}
+        />
 
-            {/* Location */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Last seen location
-              </label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. Central Park, NY"
-                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">Location</label>
+        <input
+          type="text"
+          placeholder="e.g. New York, NY"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
+        />
 
-            {/* Contact Number */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Contact Number
-              </label>
-              <input
-                type="tel"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                placeholder="e.g. +91 9876543210"
-                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">
+          Contact Number
+        </label>
+        <input
+          type="tel"
+          placeholder="e.g. +1 234 567 8901"
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
+        />
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. yourname@example.com"
-                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">
+          Email Address
+        </label>
+        <input
+          type="email"
+          placeholder="e.g. example@mail.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-4 bg-gray-900 text-white focus:ring-2 focus:ring-blue-500"
+        />
 
-            {/* Upload Image */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Upload Image (optional)
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="w-full text-sm border rounded-md px-2 py-1"
-              />
-            </div>
+        <label className="block mb-2 font-medium text-white">
+          Upload Image
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+          className="w-full border border-gray-700 rounded-md px-3 py-2 mb-6 bg-gray-900 text-white"
+        />
 
-            {image && (
-              <div className="mt-3 relative w-full h-64">
-                <Image
-                  src={URL.createObjectURL(image)}
-                  alt="Preview"
-                  fill
-                  className="object-cover rounded-md border"
-                />
-              </div>
-            )}
+        {image && (
+          <Image
+            src={URL.createObjectURL(image)}
+            alt="Preview"
+            width={800}
+            height={512}
+            className="w-full max-h-64 object-cover rounded-md border mb-4"
+            unoptimized
+          />
+        )}
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-            >
-              Post Lost Item
-            </button>
-          </form>
-        </div>
-      </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        >
+          Post Lost Item
+        </button>
+      </form>
     </div>
   );
 };

@@ -31,12 +31,12 @@ const LostItemCard: React.FC<LostItemCardProps> = ({
             alt={name}
             fill
             className="object-cover"
-            sizes="80px"
+            sizes="150px"
           />
         )}
       </div>
-      <h3 className="font-semibold text-lg">{name}</h3>
-      <p className="text-sm text-gray-500 text-center">{location}</p>
+      <h3 className="font-bold text-lg text-black">{name}</h3>
+      <p className="text-sm text-gray-800 text-center">{location}</p>
     </div>
   );
 };
